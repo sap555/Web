@@ -124,7 +124,7 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 overflow-y-auto">
-        <div className="max-w-[1800px] mx-auto h-full flex flex-col">
+        <div className="mx-auto h-full flex flex-col">
           {activeTab === 'dashboard' && (
             <Dashboard
               residents={residents}

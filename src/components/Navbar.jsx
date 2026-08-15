@@ -4,8 +4,8 @@ import { LayoutDashboard, Users, MapPin, FileText, LogIn, LogOut, ShieldCheck, H
 export default function Navbar({ activeTab, setActiveTab, isLoggedIn, currentUser, onOpenLogin, onLogout }) {
   return (
     <header className="sticky top-0 z-50 bg-slate-900 text-white shadow-lg border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
           
           {/* Logo & Portal Name */}
           <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
@@ -23,7 +23,7 @@ export default function Navbar({ activeTab, setActiveTab, isLoggedIn, currentUse
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-1">
+          <nav className="hidden md:flex space-x-2 items-center">
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${

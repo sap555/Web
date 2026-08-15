@@ -33,7 +33,7 @@ export default function Dashboard({
     <div className="space-y-4 animate-fade-in pb-4">
       
       {/* Top Banner / Welcome */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-900 text-white p-5 sm:p-6 shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-emerald-950 to-teal-900 text-white p-5 sm:p-6 shadow-xl border border-slate-800">
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center space-x-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1 rounded-full text-xs font-semibold">
             <Activity className="w-3.5 h-3.5" />
