@@ -6,6 +6,7 @@ import { jsPDF } from 'jspdf';
 export default function PdfExportModal({ isOpen, onClose, villages, residents, currentUser }) {
   const reportRef = useRef(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [exportMode, setExportMode] = useState('full');
 
   if (!isOpen) return null;
 
@@ -33,7 +34,8 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
       pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`รายงานประชากร_และแผนที่ขอบเขตหมู่บ้าน_${new Date().getTime()}.pdf`);
+      const modeLabel = exportMode === 'full' ? 'เต็ม' : 'สรุปไม่รวมรายชื่อ';
+      pdf.save(`รายงานประชากร_และแผนที่ขอบเขตหมู่บ้าน_${modeLabel}_${new Date().getTime()}.pdf`);
     } catch (err) {
       console.error('PDF Export Error:', err);
       alert('เกิดข้อผิดพลาดในการสร้างไฟล์ PDF');
@@ -80,6 +82,33 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
               className="text-slate-400 hover:text-white p-1 rounded-lg ml-2"
             >
               <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="px-6 pt-4 pb-2 bg-slate-950 border-b border-slate-700">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setExportMode('full')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+                exportMode === 'full'
+                  ? 'bg-emerald-600 text-white border-emerald-500'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              ตัวเลือกที่ 1: รายงานเต็ม
+            </button>
+            <button
+              type="button"
+              onClick={() => setExportMode('summary')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+                exportMode === 'summary'
+                  ? 'bg-emerald-600 text-white border-emerald-500'
+                  : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+              }`}
+            >
+              ตัวเลือกที่ 2: ไม่รวมรายชื่อราษฎร
             </button>
           </div>
         </div>
@@ -166,36 +195,37 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
               </table>
             </div>
 
-            {/* Resident Directory Overview Sample Table */}
-            <div>
-              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 border-l-4 border-emerald-600 pl-2">
-                2. บัญชีรายชื่อราษฎรและบ้านเลขที่
-              </h2>
-              <table className="w-full text-[11px] border-collapse border border-slate-300">
-                <thead>
-                  <tr className="bg-slate-100 font-bold text-slate-700 border-b border-slate-300">
-                    <th className="p-1.5 border border-slate-300 text-center">บ้านเลขที่</th>
-                    <th className="p-1.5 border border-slate-300 text-center">หมู่ที่</th>
-                    <th className="p-1.5 border border-slate-300 text-left">ชื่อ - นามสกุล</th>
-                    <th className="p-1.5 border border-slate-300 text-center">เพศ/อายุ</th>
-                    <th className="p-1.5 border border-slate-300 text-left">อาชีพ</th>
-                    <th className="p-1.5 border border-slate-300 text-center">สถานะ</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {residents.map(r => (
-                    <tr key={r.id} className="border-b border-slate-200">
-                      <td className="p-1.5 border border-slate-300 text-center font-bold">{r.houseNo}</td>
-                      <td className="p-1.5 border border-slate-300 text-center">หมู่ {r.moo}</td>
-                      <td className="p-1.5 border border-slate-300 font-medium">{r.prefix} {r.firstName} {r.lastName}</td>
-                      <td className="p-1.5 border border-slate-300 text-center">{r.gender} ({r.age} ปี)</td>
-                      <td className="p-1.5 border border-slate-300">{r.occupation || '-'}</td>
-                      <td className="p-1.5 border border-slate-300 text-center font-semibold">{r.status}</td>
+            {exportMode === 'full' && (
+              <div>
+                <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 border-l-4 border-emerald-600 pl-2">
+                  2. บัญชีรายชื่อราษฎรและบ้านเลขที่
+                </h2>
+                <table className="w-full text-[11px] border-collapse border border-slate-300">
+                  <thead>
+                    <tr className="bg-slate-100 font-bold text-slate-700 border-b border-slate-300">
+                      <th className="p-1.5 border border-slate-300 text-center">บ้านเลขที่</th>
+                      <th className="p-1.5 border border-slate-300 text-center">หมู่ที่</th>
+                      <th className="p-1.5 border border-slate-300 text-left">ชื่อ - นามสกุล</th>
+                      <th className="p-1.5 border border-slate-300 text-center">เพศ/อายุ</th>
+                      <th className="p-1.5 border border-slate-300 text-left">อาชีพ</th>
+                      <th className="p-1.5 border border-slate-300 text-center">สถานะ</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {residents.map(r => (
+                      <tr key={r.id} className="border-b border-slate-200">
+                        <td className="p-1.5 border border-slate-300 text-center font-bold">{r.houseNo}</td>
+                        <td className="p-1.5 border border-slate-300 text-center">หมู่ {r.moo}</td>
+                        <td className="p-1.5 border border-slate-300 font-medium">{r.prefix} {r.firstName} {r.lastName}</td>
+                        <td className="p-1.5 border border-slate-300 text-center">{r.gender} ({r.age} ปี)</td>
+                        <td className="p-1.5 border border-slate-300">{r.occupation || '-'}</td>
+                        <td className="p-1.5 border border-slate-300 text-center font-semibold">{r.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
             {/* Verification Signatures Block */}
             <div className="pt-10 grid grid-cols-2 gap-8 text-center text-xs text-slate-700">
