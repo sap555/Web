@@ -19,6 +19,37 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
     day: 'numeric'
   });
 
+  const mapBounds = (() => {
+    const allPoints = villages.flatMap(v => v.boundary || []);
+    if (allPoints.length === 0) {
+      return { minLat: 0, maxLat: 1, minLng: 0, maxLng: 1 };
+    }
+
+    const latValues = allPoints.map(([lat]) => lat);
+    const lngValues = allPoints.map(([, lng]) => lng);
+
+    return {
+      minLat: Math.min(...latValues),
+      maxLat: Math.max(...latValues),
+      minLng: Math.min(...lngValues),
+      maxLng: Math.max(...lngValues)
+    };
+  })();
+
+  const projectPointToSvg = (point) => {
+    const width = 600;
+    const height = 320;
+    const padding = 26;
+    const { minLat, maxLat, minLng, maxLng } = mapBounds;
+    const latRange = maxLat - minLat || 1;
+    const lngRange = maxLng - minLng || 1;
+
+    const x = padding + ((point[1] - minLng) / lngRange) * (width - padding * 2);
+    const y = height - padding - ((point[0] - minLat) / latRange) * (height - padding * 2);
+
+    return { x, y };
+  };
+
   const handleDownloadPdf = async () => {
     if (!reportRef.current) return;
     setIsGenerating(true);
@@ -193,6 +224,71 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
                   })}
                 </tbody>
               </table>
+            </div>
+
+            <div>
+              <h2 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 border-l-4 border-emerald-600 pl-2">
+                2. แผนที่ขอบเขตหมู่บ้านที่บันทึกไว้
+              </h2>
+
+              <svg viewBox="0 0 600 320" className="w-full h-[320px] border border-slate-300 rounded-xl bg-slate-50">
+                <rect x="0" y="0" width="600" height="320" fill="#f8fafc" />
+
+                {villages.map(v => {
+                  const points = (v.boundary || []).map(point => {
+                    const { x, y } = projectPointToSvg(point);
+                    return `${x},${y}`;
+                  }).join(' ');
+
+                  const centroid = (v.boundary || []).reduce((acc, point) => {
+                    const { x, y } = projectPointToSvg(point);
+                    return { x: acc.x + x, y: acc.y + y };
+                  }, { x: 0, y: 0 });
+
+                  const centerX = v.boundary?.length ? centroid.x / v.boundary.length : 300;
+                  const centerY = v.boundary?.length ? centroid.y / v.boundary.length : 160;
+
+                  return (
+                    <g key={v.id}>
+                      <polygon
+                        points={points}
+                        fill={v.color}
+                        fillOpacity="0.24"
+                        stroke={v.color}
+                        strokeWidth="2"
+                        strokeLinejoin="round"
+                      />
+                      <text
+                        x={centerX}
+                        y={centerY}
+                        textAnchor="middle"
+                        fontSize="12"
+                        fontWeight="700"
+                        fill="#0f172a"
+                      >
+                        หมู่ {v.mooNumber}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {residents.filter(r => Number.isFinite(r.lat) && Number.isFinite(r.lng)).map(r => {
+                  const { x, y } = projectPointToSvg([r.lat, r.lng]);
+                  const villageColor = villages.find(v => v.mooNumber === r.moo)?.color || '#10B981';
+
+                  return (
+                    <circle
+                      key={r.id}
+                      cx={x}
+                      cy={y}
+                      r="3.5"
+                      fill={villageColor}
+                      stroke="#ffffff"
+                      strokeWidth="1.4"
+                    />
+                  );
+                })}
+              </svg>
             </div>
 
             {exportMode === 'full' && (
