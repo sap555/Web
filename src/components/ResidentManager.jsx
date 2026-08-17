@@ -4,6 +4,71 @@ import {
   X, Check, MapPin, Phone, UserCheck, ChevronRight
 } from 'lucide-react';
 
+const normalizeResidentData = (resident) => ({
+  ...resident,
+  citizenId: String(resident.citizenId || '').trim(),
+  prefix: String(resident.prefix || '').trim(),
+  firstName: String(resident.firstName || '').trim(),
+  lastName: String(resident.lastName || '').trim(),
+  houseNo: String(resident.houseNo || '').trim(),
+  occupation: String(resident.occupation || '').trim(),
+  phone: String(resident.phone || '').trim(),
+  status: String(resident.status || '').trim(),
+  villageName: String(resident.villageName || '').trim(),
+  gender: resident.gender || 'ชาย',
+  age: Number.isFinite(Number(resident.age)) ? Number(resident.age) : 0,
+  moo: Number(resident.moo) || 1,
+  lat: Number.isFinite(Number(resident.lat)) ? Number(resident.lat) : 0,
+  lng: Number.isFinite(Number(resident.lng)) ? Number(resident.lng) : 0,
+});
+
+const validateResidentData = (resident, villages = [], allResidents = [], currentId = null) => {
+  const normalized = normalizeResidentData(resident);
+
+  if (!normalized.firstName) return 'กรุณากรอกชื่อ';
+  if (!normalized.lastName) return 'กรุณากรอกนามสกุล';
+  if (!normalized.houseNo) return 'กรุณากรอกบ้านเลขที่';
+  if (!normalized.moo || normalized.moo < 1) return 'หมู่ที่ไม่ถูกต้อง';
+
+  const selectedVillage = normalized.moo && villages.some(v => v.mooNumber === normalized.moo);
+  if (!selectedVillage) return 'หมู่ที่ที่เลือกไม่มีอยู่ในระบบ';
+
+  if (!Number.isInteger(normalized.age) || normalized.age < 0 || normalized.age > 120) {
+    return 'อายุต้องเป็นตัวเลขตั้งแต่ 0 ถึง 120 ปี';
+  }
+
+  if (normalized.citizenId) {
+    const citizenPattern = /^\d[\d-]{8,20}$/;
+    if (!citizenPattern.test(normalized.citizenId.replace(/\s+/g, ''))) {
+      return 'เลขบัตรประชาชนไม่ถูกต้อง';
+    }
+  }
+
+  if (normalized.phone) {
+    const phonePattern = /^[0-9\-+()\s]{8,15}$/;
+    if (!phonePattern.test(normalized.phone)) {
+      return 'เบอร์โทรศัพท์ไม่ถูกต้อง';
+    }
+  }
+
+  const duplicate = allResidents.find(existing => {
+    if (currentId && existing.id === currentId) return false;
+    if (normalized.citizenId && existing.citizenId && existing.citizenId === normalized.citizenId) {
+      return true;
+    }
+    return existing.firstName === normalized.firstName &&
+      existing.lastName === normalized.lastName &&
+      existing.houseNo === normalized.houseNo &&
+      existing.moo === normalized.moo;
+  });
+
+  if (duplicate) {
+    return 'ข้อมูลชาวบ้านนี้มีอยู่แล้วในระบบ';
+  }
+
+  return null;
+};
+
 export default function ResidentManager({ 
   residents, 
   villages, 
@@ -81,11 +146,16 @@ export default function ResidentManager({
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    if (!formData.firstName || !formData.lastName || !formData.houseNo) {
-      setFormError('กรุณากรอก ชื่อ, นามสกุล และ บ้านเลขที่ ให้ครบถ้วน');
+
+    const validationMessage = validateResidentData(formData, villages, residents, editingResident?.id);
+    if (validationMessage) {
+      setFormError(validationMessage);
       return;
     }
-    onSaveResident(formData);
+
+    const cleanedResident = normalizeResidentData(formData);
+    onSaveResident(cleanedResident);
+    setFormError('');
     setIsFormOpen(false);
   };
 
@@ -164,7 +234,7 @@ export default function ResidentManager({
       <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3 shrink-0">
         
         {/* Moo Filter Tabs */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+        <div className="flex items-center gap-2.5 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
           <span className="text-xs font-semibold text-slate-500 px-2 flex items-center shrink-0">
             <Filter className="w-3.5 h-3.5 mr-1" /> หมู่ที่:
           </span>

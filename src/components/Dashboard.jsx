@@ -49,7 +49,7 @@ export default function Dashboard({
           <div className="pt-2 flex flex-wrap gap-3">
             <button
               onClick={() => onNavigate('residents')}
-              className="flex items-center space-x-2 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-medium text-sm shadow-md transition transform active:scale-95"
+              className="flex items-center space-x-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 border-slate-700 rounded-xl font-medium text-sm shadow-md transition transform active:scale-95"
             >
               <Users className="w-4 h-4" />
               <span>ดูรายชื่อประชากรทั้งหมด</span>
@@ -117,7 +117,7 @@ export default function Dashboard({
 
         {/* Stat 3: Total Villages/Moo */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md transition">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
             <div>
               <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">จำนวนหมู่บ้าน (หมู่ที่)</p>
               <h3 className="text-3xl font-extrabold text-slate-900 mt-1">{villages.length} <span className="text-sm font-medium text-slate-500">หมู่</span></h3>
@@ -156,13 +156,6 @@ export default function Dashboard({
             <h3 className="text-lg font-bold text-slate-800">สรุปข้อมูลจำแนกตามหมู่บ้าน (หมู่ที่)</h3>
             <p className="text-xs text-slate-500">คลิกที่แต่ละหมู่บ้านเพื่อดูรายละเอียดประชากรหรือวาดขอบเขตแผนที่</p>
           </div>
-          <button
-            onClick={() => onOpenAddResident()}
-            className="flex items-center space-x-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-3.5 py-2 rounded-xl transition"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>+ เพิ่มข้อมูลชาวบ้าน</span>
-          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

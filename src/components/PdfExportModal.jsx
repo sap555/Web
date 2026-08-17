@@ -57,7 +57,7 @@ export default function PdfExportModal({ isOpen, onClose, villages, residents, c
             <h3 className="font-bold text-sm text-white">ส่งออกเอกสารรายงานระบบสารสนเทศประจำหมู่บ้าน (PDF Report)</h3>
           </div>
           
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <button
               onClick={handlePrint}
               className="flex items-center space-x-1 bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-200 transition"

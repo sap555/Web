@@ -235,6 +235,11 @@ export const INITIAL_RESIDENTS = [
   }
 ];
 
+export const DEMO_CREDENTIALS = {
+  username: 'admin',
+  password: '123456'
+};
+
 export const DEMO_USER = {
   name: "แอดมิน",
   role: "เจ้าหน้าที่ทะเบียนท้องถิ่น / ผู้บริหาร",

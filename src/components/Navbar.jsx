@@ -23,7 +23,7 @@ export default function Navbar({ activeTab, setActiveTab, isLoggedIn, currentUse
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-2 items-center">
+          <nav className="hidden md:flex gap-3 items-center">
             <button
               onClick={() => setActiveTab('dashboard')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${

@@ -1,28 +1,39 @@
 import React, { useState } from 'react';
-import { X, ShieldCheck, Lock, User, KeyRound, CheckCircle2 } from 'lucide-react';
-import { DEMO_USER } from '../data/mockData';
+import { X, ShieldCheck, User, KeyRound } from 'lucide-react';
+import { DEMO_CREDENTIALS, DEMO_USER } from '../data/mockData';
 
 export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('123456');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!username || !password) {
+
+    if (!username.trim() || !password.trim()) {
       setError('กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน');
       return;
     }
+
+    const isValidDemoLogin =
+      username.trim() === DEMO_CREDENTIALS.username &&
+      password === DEMO_CREDENTIALS.password;
+
+    if (!isValidDemoLogin) {
+      setError('ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง');
+      return;
+    }
+
     setError('');
     onLoginSuccess(DEMO_USER);
     onClose();
   };
 
   const handleDemoFill = () => {
-    setUsername('admin');
-    setPassword('123456');
+    setUsername(DEMO_CREDENTIALS.username);
+    setPassword(DEMO_CREDENTIALS.password);
     setError('');
   };
 
@@ -103,7 +114,7 @@ export default function LoginModal({ isOpen, onClose, onLoginSuccess }) {
             </button>
           </div>
 
-          <div className="pt-2 flex items-center justify-end space-x-3">
+          <div className="pt-2 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={onClose}
