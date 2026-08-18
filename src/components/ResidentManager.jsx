@@ -80,9 +80,7 @@ export default function ResidentManager({
   editingResident,
   setEditingResident
 }) {
-  const [residents, setResidents] = useState(() => 
-    JSON.parse(localStorage.getItem('village_residents')) || INITIAL_RESIDENTS
-  );
+  const [residents, setResidents] = useState(INITIAL_RESIDENTS);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Form State
