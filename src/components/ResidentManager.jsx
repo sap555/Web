@@ -3,6 +3,8 @@ import {
   Users, Search, Filter, Plus, Edit2, Trash2, Home, Download, 
   X, Check, MapPin, Phone, UserCheck, ChevronRight
 } from 'lucide-react';
+import { INITIAL_RESIDENTS } from '../data/mockData';
+import { saveResidentToGoogleSheets } from '../services/googleSheets';
 
 const normalizeResidentData = (resident) => ({
   ...resident,
@@ -70,17 +72,17 @@ const validateResidentData = (resident, villages = [], allResidents = [], curren
 };
 
 export default function ResidentManager({ 
-  residents, 
   villages, 
   selectedMooFilter,
   setSelectedMooFilter,
-  onSaveResident, 
-  onDeleteResident,
   isFormOpen,
   setIsFormOpen,
   editingResident,
   setEditingResident
 }) {
+  const [residents, setResidents] = useState(() => 
+    JSON.parse(localStorage.getItem('village_residents')) || INITIAL_RESIDENTS
+  );
   const [searchTerm, setSearchTerm] = useState('');
 
   // Form State
@@ -96,13 +98,74 @@ export default function ResidentManager({
     moo: 1,
     villageName: 'บ้านดอนงาม',
     occupation: '',
-    phone: '',
+    phone: 'xxx-xxx-xxxx',
     status: 'เจ้าบ้าน',
     lat: 14.5310,
     lng: 100.9180
   });
 
   const [formError, setFormError] = useState('');
+
+  // Persist residents to localStorage
+  React.useEffect(() => {
+    localStorage.setItem('village_residents', JSON.stringify(residents));
+  }, [residents]);
+
+  // Handle save resident
+  const handleSaveResident = async (residentData) => {
+    if (!residentData || !residentData.id) return;
+
+    const normalizedResident = {
+      ...residentData,
+      id: String(residentData.id).trim(),
+      citizenId: String(residentData.citizenId || '').trim(),
+      prefix: String(residentData.prefix || '').trim(),
+      firstName: String(residentData.firstName || '').trim(),
+      lastName: String(residentData.lastName || '').trim(),
+      houseNo: String(residentData.houseNo || '').trim(),
+      occupation: String(residentData.occupation || '').trim(),
+      phone: String(residentData.phone || '').trim(),
+      status: String(residentData.status || '').trim(),
+      villageName: String(residentData.villageName || '').trim(),
+      gender: residentData.gender || 'ชาย',
+      age: Number.isFinite(Number(residentData.age)) ? Number(residentData.age) : 0,
+      moo: Number(residentData.moo) || 1,
+      lat: Number.isFinite(Number(residentData.lat)) ? Number(residentData.lat) : 0,
+      lng: Number.isFinite(Number(residentData.lng)) ? Number(residentData.lng) : 0,
+    };
+
+    if (!normalizedResident.firstName || !normalizedResident.lastName || !normalizedResident.houseNo) {
+      return;
+    }
+
+    setResidents(prev => {
+      const existsIndex = prev.findIndex(r => r.id === normalizedResident.id);
+      if (existsIndex >= 0) {
+        const updated = [...prev];
+        updated[existsIndex] = normalizedResident;
+        return updated;
+      }
+
+      const duplicateCitizen = prev.find(r =>
+        normalizedResident.citizenId &&
+        r.citizenId &&
+        r.citizenId === normalizedResident.citizenId
+      );
+
+      if (duplicateCitizen) {
+        return prev;
+      }
+
+      return [normalizedResident, ...prev];
+    });
+
+    await saveResidentToGoogleSheets(normalizedResident);
+  };
+
+  // Handle delete resident
+  const handleDeleteResident = (residentId) => {
+    setResidents(prev => prev.filter(r => r.id !== residentId));
+  };
 
   // Handle open modal for new or editing
   const handleOpenAddModal = () => {
@@ -119,7 +182,7 @@ export default function ResidentManager({
       moo: selectedMooFilter === 'ALL' ? 1 : Number(selectedMooFilter),
       villageName: villages.find(v => v.mooNumber === (selectedMooFilter === 'ALL' ? 1 : Number(selectedMooFilter)))?.name || 'บ้านดอนงาม',
       occupation: 'เกษตรกร',
-      phone: '',
+      phone: 'xxx-xxx-xxxx',
       status: 'เจ้าบ้าน',
       lat: 14.5320,
       lng: 100.9250
@@ -154,7 +217,7 @@ export default function ResidentManager({
     }
 
     const cleanedResident = normalizeResidentData(formData);
-    onSaveResident(cleanedResident);
+    handleSaveResident(cleanedResident);
     setFormError('');
     setIsFormOpen(false);
   };
@@ -271,13 +334,13 @@ export default function ResidentManager({
         </div>
 
         {/* Search Bar */}
-        <div className="relative w-full md:w-72">
+        <div className="relative w- md:w-72">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="ค้นหา ชื่อ, บ้านเลขที่, บัตร ปชช..."
+            placeholder="ค้นหา ชื่อ, บ้านเลขที่..."
             className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
           {searchTerm && (
@@ -301,7 +364,6 @@ export default function ResidentManager({
                 <th className="py-3.5 px-4 text-center">บ้านเลขที่</th>
                 <th className="py-3.5 px-4">หมู่ที่ / ชื่อหมู่บ้าน</th>
                 <th className="py-3.5 px-4">ชื่อ - นามสกุล</th>
-                <th className="py-3.5 px-4">เลขบัตรประชาชน</th>
                 <th className="py-3.5 px-4">เพศ/อายุ</th>
                 <th className="py-3.5 px-4">อาชีพ</th>
                 <th className="py-3.5 px-4">เบอร์โทรศัพท์</th>
@@ -341,12 +403,7 @@ export default function ResidentManager({
                       <td className="py-3 px-4 font-semibold text-slate-900">
                         {r.prefix} {r.firstName} {r.lastName}
                       </td>
-
-                      {/* Citizen ID */}
-                      <td className="py-3 px-4 font-mono text-slate-500 text-[11px]">
-                        {r.citizenId || '-'}
-                      </td>
-
+                      
                       {/* Gender & Age */}
                       <td className="py-3 px-4">
                         <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-semibold ${
@@ -393,7 +450,7 @@ export default function ResidentManager({
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => onDeleteResident(r.id)}
+                            onClick={() => handleDeleteResident(r.id)}
                             title="ลบข้อมูล"
                             className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition"
                           >
@@ -545,18 +602,6 @@ export default function ResidentManager({
                     onChange={(e) => setFormData(p => ({ ...p, lastName: e.target.value }))}
                     placeholder="ใจดี"
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                  />
-                </div>
-
-                {/* Citizen ID */}
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">เลขบัตรประชาชน</label>
-                  <input
-                    type="text"
-                    value={formData.citizenId}
-                    onChange={(e) => setFormData(p => ({ ...p, citizenId: e.target.value }))}
-                    placeholder="1-1002-XXXXX-XX-X"
-                    className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 

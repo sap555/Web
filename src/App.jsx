@@ -200,12 +200,9 @@ export default function App() {
 
           {visibleTab === 'residents' && isLoggedIn && (
             <ResidentManager
-              residents={residents}
               villages={villages}
               selectedMooFilter={selectedMooFilter}
               setSelectedMooFilter={setSelectedMooFilter}
-              onSaveResident={handleSaveResident}
-              onDeleteResident={handleDeleteResident}
               isFormOpen={isFormOpen}
               setIsFormOpen={setIsFormOpen}
               editingResident={editingResident}
