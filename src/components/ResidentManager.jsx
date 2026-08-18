@@ -361,6 +361,7 @@ export default function ResidentManager({
               <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                 <th className="py-3.5 px-4 text-center">บ้านเลขที่</th>
                 <th className="py-3.5 px-4">หมู่ที่ / ชื่อหมู่บ้าน</th>
+                <th className="py-3.5 px-4">เลขบัตรประชาชน</th>
                 <th className="py-3.5 px-4">ชื่อ - นามสกุล</th>
                 <th className="py-3.5 px-4">เพศ/อายุ</th>
                 <th className="py-3.5 px-4">อาชีพ</th>
@@ -383,6 +384,7 @@ export default function ResidentManager({
                         </span>
                       </td>
 
+
                       {/* Village & Moo */}
                       <td className="py-3 px-4">
                         <div className="flex items-center space-x-2">
@@ -397,6 +399,13 @@ export default function ResidentManager({
                         </div>
                       </td>
 
+                      {/* Citizen ID */}
+                      <td className="py-3 px-4">
+                        <span className="font-mono text-[10px] text-slate-700 bg-slate-100 border border-slate-200 rounded px-2 py-1 inline-block">
+                          {r.citizenId || '-'}
+                        </span>
+                      </td>
+                      
                       {/* Name */}
                       <td className="py-3 px-4 font-semibold text-slate-900">
                         {r.prefix} {r.firstName} {r.lastName}
@@ -462,7 +471,7 @@ export default function ResidentManager({
                 })
               ) : (
                 <tr>
-                  <td colSpan="9" className="py-12 text-center text-slate-400">
+                  <td colSpan="10" className="py-12 text-center text-slate-400">
                     <Users className="w-10 h-10 mx-auto mb-2 opacity-30" />
                     <p className="text-sm font-medium">ไม่พบข้อมูลประชากรตามเงื่อนไขค้นหา</p>
                   </td>
