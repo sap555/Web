@@ -6,7 +6,7 @@ export const INITIAL_VILLAGES = [
     mooNumber: 1,
     name: "บ้านดอนงาม",
     headman: "นายสมชาย ใจดี",
-    headmanPhone: "081-234-5678",
+    headmanPhone: "xxx-xxx-xxxx",
     color: "#3B82F6", // Blue
     boundary: [
       [14.528, 100.912],
@@ -21,7 +21,7 @@ export const INITIAL_VILLAGES = [
     mooNumber: 2,
     name: "บ้านหนองบัว",
     headman: "นายวิชัย รุ่งเรือง",
-    headmanPhone: "089-876-5432",
+    headmanPhone: "xxx-xxx-xxxx",
     color: "#10B981", // Emerald Green
     boundary: [
       [14.530, 100.928],
@@ -36,7 +36,7 @@ export const INITIAL_VILLAGES = [
     mooNumber: 3,
     name: "บ้านโคกสว่าง",
     headman: "นางบุญนำ ศรีสุข",
-    headmanPhone: "086-555-1234",
+    headmanPhone: "xxx-xxx-xxxx",
     color: "#F59E0B", // Amber
     boundary: [
       [14.520, 100.920],
@@ -51,7 +51,7 @@ export const INITIAL_VILLAGES = [
     mooNumber: 4,
     name: "บ้านป่าไร่พัฒนา",
     headman: "นายประเสริฐ ยั่งยืน",
-    headmanPhone: "082-333-7890",
+    headmanPhone: "xxx-xxx-xxxx",
     color: "#8B5CF6", // Purple
     boundary: [
       [14.538, 100.925],
@@ -65,7 +65,7 @@ export const INITIAL_VILLAGES = [
 export const INITIAL_RESIDENTS = [
   {
     id: "res-001",
-    citizenId: "1-1002-00345-12-1",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "สมชาย",
     lastName: "ใจดี",
@@ -75,14 +75,14 @@ export const INITIAL_RESIDENTS = [
     moo: 1,
     villageName: "บ้านดอนงาม",
     occupation: "เกษตรกร / ผู้ใหญ่บ้าน",
-    phone: "081-234-5678",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5310,
     lng: 100.9180
   },
   {
     id: "res-002",
-    citizenId: "3-1002-00345-12-2",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาง",
     firstName: "สมศรี",
     lastName: "ใจดี",
@@ -92,14 +92,14 @@ export const INITIAL_RESIDENTS = [
     moo: 1,
     villageName: "บ้านดอนงาม",
     occupation: "ค้าขาย",
-    phone: "081-234-5679",
+    phone: "xxx-xxx-xxxx",
     status: "ผู้อยู่อาศัย",
     lat: 14.5310,
     lng: 100.9180
   },
   {
     id: "res-003",
-    citizenId: "1-1002-00888-55-9",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "กิตติ",
     lastName: "พงษ์พาณิชย์",
@@ -109,14 +109,14 @@ export const INITIAL_RESIDENTS = [
     moo: 1,
     villageName: "บ้านดอนงาม",
     occupation: "พนักงานบริษัท",
-    phone: "084-111-2233",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5295,
     lng: 100.9215
   },
   {
     id: "res-004",
-    citizenId: "1-2005-00123-99-4",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "วิชัย",
     lastName: "รุ่งเรือง",
@@ -126,14 +126,14 @@ export const INITIAL_RESIDENTS = [
     moo: 2,
     villageName: "บ้านหนองบัว",
     occupation: "รับราชการ / ผู้ใหญ่บ้าน",
-    phone: "089-876-5432",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5360,
     lng: 100.9330
   },
   {
     id: "res-005",
-    citizenId: "3-2005-00123-99-5",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นางสาว",
     firstName: "อารียา",
     lastName: "รุ่งเรือง",
@@ -143,14 +143,14 @@ export const INITIAL_RESIDENTS = [
     moo: 2,
     villageName: "บ้านหนองบัว",
     occupation: "นักศึกษา",
-    phone: "089-876-9999",
+    phone: "xxx-xxx-xxxx",
     status: "ผู้อยู่อาศัย",
     lat: 14.5360,
     lng: 100.9330
   },
   {
     id: "res-006",
-    citizenId: "1-3001-00444-11-2",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาง",
     firstName: "บุญนำ",
     lastName: "ศรีสุข",
@@ -160,14 +160,14 @@ export const INITIAL_RESIDENTS = [
     moo: 3,
     villageName: "บ้านโคกสว่าง",
     occupation: "ทำสวน / ผู้ใหญ่บ้าน",
-    phone: "086-555-1234",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5230,
     lng: 100.9260
   },
   {
     id: "res-007",
-    citizenId: "1-3001-00444-11-3",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "มานพ",
     lastName: "ศรีสุข",
@@ -177,14 +177,14 @@ export const INITIAL_RESIDENTS = [
     moo: 3,
     villageName: "บ้านโคกสว่าง",
     occupation: "บำนาญ",
-    phone: "086-555-4321",
+    phone: "xxx-xxx-xxxx",
     status: "ผู้อยู่อาศัย",
     lat: 14.5230,
     lng: 100.9260
   },
   {
     id: "res-008",
-    citizenId: "1-4009-00777-33-8",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "ประเสริฐ",
     lastName: "ยั่งยืน",
@@ -194,14 +194,14 @@ export const INITIAL_RESIDENTS = [
     moo: 4,
     villageName: "บ้านป่าไร่พัฒนา",
     occupation: "เกษตรกร / ผู้ใหญ่บ้าน",
-    phone: "082-333-7890",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5440,
     lng: 100.9280
   },
   {
     id: "res-009",
-    citizenId: "2-4009-00777-33-9",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นางสาว",
     firstName: "พิมพ์ใจ",
     lastName: "ยั่งยืน",
@@ -211,14 +211,14 @@ export const INITIAL_RESIDENTS = [
     moo: 4,
     villageName: "บ้านป่าไร่พัฒนา",
     occupation: "ครูโรงเรียนชุมชน",
-    phone: "082-333-7891",
+    phone: "xxx-xxx-xxxx",
     status: "ผู้อยู่อาศัย",
     lat: 14.5440,
     lng: 100.9280
   },
   {
     id: "res-010",
-    citizenId: "1-1002-00999-00-1",
+    citizenId: "x-xxxx-xxxxx-xx-x",
     prefix: "นาย",
     firstName: "ธนกร",
     lastName: "เจริญพร",
@@ -228,7 +228,7 @@ export const INITIAL_RESIDENTS = [
     moo: 1,
     villageName: "บ้านดอนงาม",
     occupation: "ธุรกิจส่วนตัว",
-    phone: "088-999-0000",
+    phone: "xxx-xxx-xxxx",
     status: "เจ้าบ้าน",
     lat: 14.5330,
     lng: 100.9240
