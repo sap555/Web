@@ -8,7 +8,7 @@ export default function Navbar({ activeTab, setActiveTab, isLoggedIn, currentUse
         <div className="flex items-center justify-between h-20">
           
           {/* Logo & Portal Name */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('dashboard')}>
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-md shadow-emerald-500/20">
               <Home className="w-6 h-6 text-white" />
             </div>
